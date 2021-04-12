@@ -4,6 +4,8 @@
 
 In this project, the goal is to create an entire API to serve information to a "Boss Machine". It will create routes to manage the 'minions', the 'million dollar ideas', and to handle all the meetings.
 
+![screenshot](screenshot.png)
+
 #### Routes
 
 - `/api/minions`

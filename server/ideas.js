@@ -1,12 +1,5 @@
-/*
-GET /api/ideas to get an array of all ideas.
-POST /api/ideas to create a new idea and save it to the database.
-GET /api/ideas/:ideaId to get a single idea by id.
-PUT /api/ideas/:ideaId to update a single idea by id.
-DELETE /api/ideas/:ideaId to delete a single idea by id.
-*/
-
 const express = require("express");
+const checkMillionDollarIdea = require("./checkMillionDollarIdea.js");
 const ideasRouter = express.Router();
 const {
   getAllFromDatabase,
@@ -17,23 +10,40 @@ const {
 } = require("./db.js");
 
 ideasRouter.get("/", (req, res) => {
-  res.send(getAllFromDatabase("ideas"));
+  res.json(getAllFromDatabase("ideas"));
 });
 
-ideasRouter.post("/", (req, res) => {
-  res.send(addToDatabase("ideas", req.body));
+ideasRouter.post("/", checkMillionDollarIdea, (req, res) => {
+  res.status(201).json(addToDatabase("ideas", req.body));
 });
 
 ideasRouter.get("/:ideaId", (req, res) => {
-  res.send(getFromDatabaseById("ideas", req.params.ideaId));
+  const check = getFromDatabaseById("ideas", req.params.ideaId);
+  if (check) {
+    res.json(check);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 ideasRouter.put("/:ideaId", (req, res) => {
-  res.send(updateInstanceInDatabase("ideas", req.body));
+  const result = getFromDatabaseById("ideas", req.params.ideaId);
+  if (result) {
+    res.json(updateInstanceInDatabase("ideas", req.body));
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 ideasRouter.delete("/:ideaId", (req, res) => {
-  res.send(deleteFromDatabasebyId("ideas", req.params.ideaId));
+  const check = getFromDatabaseById("ideas", req.params.ideaId);
+  if (check) {
+    deleteFromDatabasebyId("ideas", req.params.ideaId);
+    res.status(204);
+  } else {
+    res.status(404);
+  }
+  res.send();
 });
 
 module.exports = ideasRouter;

@@ -1,11 +1,3 @@
-/* 
-GET /api/minions to get an array of all minions.
-POST /api/minions to create a new minion and save it to the database.
-GET /api/minions/:minionId to get a single minion by id.
-PUT /api/minions/:minionId to update a single minion by id.
-DELETE /api/minions/:minionId to delete a single minion by id.
-*/
-
 const express = require("express");
 const {
   getAllFromDatabase,
@@ -17,23 +9,41 @@ const {
 const minionsRouter = express.Router();
 
 minionsRouter.get("/", (req, res) => {
-  res.send(getAllFromDatabase("minions"));
+  res.json(getAllFromDatabase("minions"));
 });
 
 minionsRouter.post("/", (req, res) => {
-  res.send(addToDatabase("minions", req.body));
+  const newMinion = addToDatabase("minions", req.body);
+  res.status(201).json(newMinion);
 });
 
 minionsRouter.get("/:minionId", (req, res) => {
-  res.send(getFromDatabaseById("minions", req.params.minionId));
+  const result = getFromDatabaseById("minions", req.params.minionId);
+  if (result) {
+    res.json(result);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 minionsRouter.put("/:minionId", (req, res) => {
-  res.send(updateInstanceInDatabase("minions", req.body));
+  const result = getFromDatabaseById("minions", req.params.minionId);
+  if (result) {
+    res.json(updateInstanceInDatabase("minions", req.body));
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 minionsRouter.delete("/:minionId", (req, res) => {
-  res.send(deleteFromDatabasebyId("minions", req.params.minionId));
+  const result = getFromDatabaseById("minions", req.params.minionId);
+  if (result) {
+    deleteFromDatabasebyId("minions", req.params.minionId);
+    res.status(204);
+  } else {
+    res.sendStatus(404);
+  }
+  res.send();
 });
 
 module.exports = minionsRouter;

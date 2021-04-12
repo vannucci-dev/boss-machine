@@ -1,27 +1,23 @@
-/*
-GET /api/meetings to get an array of all meetings.
-POST /api/meetings to create a new meeting and save it to the database.
-DELETE /api/meetings to delete all meetings from the database.
-*/
-
 const express = require("express");
 const meetingsRouter = express.Router();
 const {
   getAllFromDatabase,
   createMeeting,
+  addToDatabase,
   deleteAllFromDatabase,
 } = require("./db.js");
 
 meetingsRouter.get("/", (req, res) => {
-  res.send(getAllFromDatabase("meetings"));
+  res.json(getAllFromDatabase("meetings"));
 });
 
 meetingsRouter.post("/", (req, res) => {
-  res.send(createMeeting());
+  res.status(201).json(addToDatabase("meetings", createMeeting()));
 });
 
 meetingsRouter.delete("/", (req, res) => {
-  res.send(deleteAllFromDatabase("meetings"));
+  deleteAllFromDatabase("meetings");
+  res.sendStatus(204);
 });
 
 module.exports = meetingsRouter;
