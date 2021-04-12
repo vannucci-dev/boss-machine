@@ -24,5 +24,10 @@ In this project, the goal is to create an entire API to serve information to a "
   - GET /api/meetings to get an array of all meetings.
   - POST /api/meetings to create a new meeting and save it to the database.
   - DELETE /api/meetings to delete _all_ meetings from the database.
+- `/api/:minionId/work`
+  - GET /api/minions/:minionId/work to get an array of all work for the specified minon.
+  - POST /api/minions/:minionId/work to create a new work object and save it to the database.
+  - PUT /api/minions/:minionId/work/:workId to update a single work by id.
+  - DELETE /api/minions/:minionId/work/:workId to delete a single work by id.
 
 This project is part of the FullStack Path on Codecademy. The HTML boilerplate and CSS had been provided to me.
